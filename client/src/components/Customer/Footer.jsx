@@ -1,4 +1,6 @@
 import React from 'react';
+import { FaFacebook, FaXTwitter, FaLinkedin, FaInstagram } from "react-icons/fa6";
+import { FaTicketAlt } from "react-icons/fa";
 
 const Footer = () => {
   return (
@@ -9,7 +11,12 @@ const Footer = () => {
         </div>
 
         <div className="flex flex-col md:items-start items-center w-full">
-          <h2 className="font-semibold text-white mb-5">Company</h2>
+         <div className="flex space-x-5 text-lg mb-5">
+            <FaFacebook className="cursor-pointer  text-white hover:text-gray-600 transition" />
+            <FaXTwitter className="cursor-pointer text-white hover:text-gray-600 transition" />
+            <FaLinkedin className="cursor-pointer text-white hover:text-gray-600 transition" />
+            <FaInstagram className="cursor-pointer text-white hover:text-gray-600 transition" />
+          </div>
           <ul className="flex md:flex-col  w-full justify-between text-sm text-white/80 md:space-y-2">
             <li>
               <a href="#">Home</a>
@@ -26,7 +33,7 @@ const Footer = () => {
           </ul>
         </div>
 
-        <div className="hidden md:flex flex-col items-start w-full">
+        <div className="md:flex flex-col items-start w-full">
           <h2 className="font-semibold text-white mb-5">Email Kami</h2>
           <p className="text-sm text-white/80">Ingin Mengirim email untuk hal tertentu silahkan masukkan email!</p>
           <div className="flex items-center gap-2 pt-4">

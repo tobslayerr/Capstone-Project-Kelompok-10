@@ -4,7 +4,7 @@ const Rating = ({ initialRating, onRate, disabled = false }) => {
   const [rating, setRating] = useState(initialRating || 0);
 
   const handleRating = (value) => {
-    if (disabled) return; // Tambahkan cek jika disabled
+    if (disabled) return; 
     setRating(value);
     if (onRate) onRate(value);
   };

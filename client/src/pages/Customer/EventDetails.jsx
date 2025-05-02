@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { AppContext } from '../../context/AppContext';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import Loading from '../../components/Customer/Loading';
 import { assets } from '../../assets/assets';
 import Footer from '../../components/Customer/Footer';
@@ -9,6 +9,7 @@ import { toast } from 'react-toastify';
 
 const CourseDetails = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const [courseData, setCourseData] = useState(null);
   const [isAlreadyEnrolled, setIsAlreadyEnrolled] = useState(false);
@@ -18,7 +19,6 @@ const CourseDetails = () => {
   const fetchCourseData = async () => {
     try {
       const { data } = await axios.get(backendUrl + '/api/course/' + id);
-
       if (data.success) {
         setCourseData(data.courseData);
       } else {
@@ -34,14 +34,17 @@ const CourseDetails = () => {
       if (!userData) {
         return toast.warn('Login to Enroll');
       }
-
       if (isAlreadyEnrolled) {
         return toast.warn('Already Enrolled');
       }
 
       const token = await getToken();
 
-      const { data } = await axios.post(backendUrl + '/api/user/purchase', { courseId: courseData._id }, { headers: { Authorization: `Bearer ${token}` } });
+      const { data } = await axios.post(
+        backendUrl + '/api/user/purchase',
+        { courseId: courseData._id },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
 
       if (data.success) {
         const { session_url } = data;
@@ -68,26 +71,45 @@ const CourseDetails = () => {
     <>
       <div className="flex md:flex-row flex-col-reverse gap-10 relative items-start justify-between md:px-36 px-8 md:pt-30 pt-20 text-left">
         <div className="absolute top-0 left-0 w-full h-section-height -z-1 bg-gradient-to-b from-cyan-100/70"></div>
+        
+        <button
+          onClick={() => navigate('/')}
+          className="z-10 mb-1 px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-300 transition md:absolute md:top-8 md:left-25 active:scale-90"
+        >
+          Back to Home
+        </button>
         {/* left col */}
         <div className="max-w-xl z-10 text-gray-500">
-          <h1 className="md:text-course-deatails-heading-large text-course-deatails-heading-small font-semibold text-gray-800">{courseData.courseTitle}</h1>
-          <p className="pt-4 md:text-base text-sm" dangerouslySetInnerHTML={{ __html: courseData.courseDescription.slice(0, 200) }}></p>
+          <h1 className="md:text-course-deatails-heading-large text-course-deatails-heading-small font-semibold text-gray-800">
+            {courseData.courseTitle}
+          </h1>
+          <p
+            className="pt-4 md:text-base text-sm"
+            dangerouslySetInnerHTML={{ __html: courseData.courseDescription.slice(0, 200) }}
+          ></p>
 
           {/* review and rating */}
           <div className="flex items-center space-x-2 pt-3 pb-1 text-sm">
             <p>{calculateRating(courseData)}</p>
             <div className="flex">
               {[...Array(5)].map((_, i) => (
-                <img key={i} src={i < Math.floor(calculateRating(courseData)) ? assets.star : assets.star_blank} alt="" className="w-3.5 h-3.5" />
+                <img
+                  key={i}
+                  src={i < Math.floor(calculateRating(courseData)) ? assets.star : assets.star_blank}
+                  alt=""
+                  className="w-3.5 h-3.5"
+                />
               ))}
             </div>
 
             <p className="text-blue-600">
-              ({courseData.courseRatings.length} {courseData.courseRatings.length > 1 ? 'ratings' : 'rating'})
+              ({courseData.courseRatings.length}{' '}
+              {courseData.courseRatings.length > 1 ? 'ratings' : 'rating'})
             </p>
 
             <p>
-              {courseData.enrolledStudents.length} {courseData.enrolledStudents.lenth > 1 ? 'students' : 'student'}
+              {courseData.enrolledStudents.length}{' '}
+              {courseData.enrolledStudents.length > 1 ? 'students' : 'student'}
             </p>
           </div>
 
@@ -97,7 +119,10 @@ const CourseDetails = () => {
 
           <div className="py-20 text-sm md:text-default">
             <h3 className="text-zl font-semibold text-gray-800">Event Description</h3>
-            <p className="pt-3 rich-text" dangerouslySetInnerHTML={{ __html: courseData.courseDescription }}></p>
+            <p
+              className="pt-3 rich-text"
+              dangerouslySetInnerHTML={{ __html: courseData.courseDescription }}
+            ></p>
           </div>
         </div>
 
@@ -115,7 +140,8 @@ const CourseDetails = () => {
             <div className="flex gap-3 items-center pt-2">
               <p className="text-gray-800 md:text-4xl text-2xl font-semibold">
                 {currency}
-                {(courseData.coursePrice - (courseData.discount * courseData.coursePrice) / 100).toFixed(2)}
+                {(courseData.coursePrice -
+                  (courseData.discount * courseData.coursePrice) / 100).toFixed(2)}
               </p>
               <p className="md:text-lg text-gray-500 line-through">
                 {currency}
@@ -138,7 +164,10 @@ const CourseDetails = () => {
               </div>
             </div>
 
-            <button onClick={enrollCourse} className="md:mt-6 mt-4 w-full py-3 rounded bg-blue-600 text-white font-medium">
+            <button
+              onClick={enrollCourse}
+              className="md:mt-6 mt-4 w-full py-3 rounded bg-blue-600 text-white font-medium"
+            >
               {isAlreadyEnrolled ? 'Already Enrolled' : 'Enroll Now'}
             </button>
 
@@ -150,9 +179,13 @@ const CourseDetails = () => {
                 <li>Downloadable resource</li>
                 <li>Certificate of completion</li>
               </ul>
+              
             </div>
+            
           </div>
+          
         </div>
+        
       </div>
 
       <Footer />
