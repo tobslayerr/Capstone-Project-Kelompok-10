@@ -46,7 +46,7 @@ const Dashboard = () => {
             <img src={assets.appointments_icon} alt="appointments_icon" className="w-10 h-10" />
             <div>
               <p className="text-2xl font-medium text-gray-600">{dashboardData.totalCourses}</p>
-              <p className="text-base text-gray-500">Total Courses</p>
+              <p className="text-base text-gray-500">Total Events</p>
             </div>
           </div>
 

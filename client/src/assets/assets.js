@@ -44,6 +44,12 @@ import profile_img from './profile_img.png';
 import profile_img2 from './profile_img2.png';
 import profile_img3 from './profile_img3.png';
 import lesson_icon from './lesson_icon.svg';
+import image1 from './image1.jpg';
+import image2 from './image2.jpg';
+import image3 from './image3.jpg';
+import image4 from './image4.jpg';
+import profile from './profile.jpg';
+
 
 export const assets = {
   logo,
@@ -92,6 +98,11 @@ export const assets = {
   play_icon,
   blue_tick_icon,
   lesson_icon,
+  image1,
+  image2,
+  image3,
+  image4,
+  profile,
 };
 
 export const dummyEventDetails = [

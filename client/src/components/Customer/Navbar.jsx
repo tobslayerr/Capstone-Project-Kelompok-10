@@ -40,7 +40,7 @@ const Navbar = () => {
       <h1 className='font-medium text-white text-xl'>SiEvent</h1>
 
       {/* Desktop View */}
-      <div className="hidden md:flex items-center gap-5 text-gray-500">
+      <div className="hidden md:flex items-center gap-5 text-white">
         <div className="flex items-center gap-5">
           {user && (
             <>

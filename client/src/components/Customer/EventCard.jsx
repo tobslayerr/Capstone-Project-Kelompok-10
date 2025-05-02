@@ -3,11 +3,11 @@ import { assets } from '../../assets/assets';
 import { AppContext } from '../../context/AppContext';
 import { Link } from 'react-router-dom';
 
-const CourseCard = ({ course }) => {
+const EventCard = ({ course }) => {
   const { currency, calculateRating } = useContext(AppContext);
 
   return (
-    <Link to={'/course/' + course._id} onClick={() => scrollTo(0, 0)} className="border border-gray-500/30 pb-6 overflow-hidden rounded-lg">
+    <Link to={'/course/' + course._id} onClick={() => scrollTo(0, 0)} className="border border-gray-400 pb-6 overflow-hidden rounded-lg transition duration-300 active:scale-90">
       <img className="w-full" src={course.courseThumbnail} alt="" />
 
       <div className="p-3 text-left">
@@ -33,4 +33,4 @@ const CourseCard = ({ course }) => {
   );
 };
 
-export default CourseCard;
+export default EventCard;

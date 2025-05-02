@@ -3,17 +3,17 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import { assets } from '../../assets/assets';
 
-const Caraousel = () => {
+const Carousel = () => {
   const [images, setImages] = useState([]);
   const sliderRef = useRef(null);
 
   useEffect(() => {
     const fetchImages = async () => {
       const dummyData = [
-        { id: 1, src: "/images/image1.jpg" },
-        { id: 2, src: "/images/image2.jpg" },
-        { id: 3, src: "/images/image3.jpg" },
+        { id: 1, src: assets.image2 },
+        { id: 2, src: assets.image1 },
       ];
       setImages(dummyData);
     };
@@ -67,4 +67,4 @@ const Caraousel = () => {
   );
 };
 
-export default Caraousel;
+export default Carousel;

@@ -1,29 +1,32 @@
-import React, { useContext } from 'react';
-import { Link } from 'react-router-dom';
-import { AppContext } from '../../context/AppContext';
-import CourseCard from './EventCard';
+import React, { useContext } from "react";
+import { Link } from "react-router-dom";
+import { AppContext } from "../../context/AppContext";
+import EventCard from "./EventCard"; 
 
-const CoursesSection = () => {
+const EventTerdekat = () => {
   const { allCourses } = useContext(AppContext);
+  const events = allCourses.slice(0, 5); 
 
   return (
-    <div className="py-16 md:px-40 px-8">
-      <h2 className="text-3xl font-medium text-gray-800">Event Terdekat</h2>
-      <p className="text-sm md:text-base text-gray-500 mt-3">
-        Daftar Event yang sebentar lagi mulai!
-      </p>
-
-      <div className="grid grid-cols-auto px-4 md:px-0 md:my-16 my-10 gap-4">
-        {allCourses.slice(0, 4).map((course, index) => (
-          <CourseCard key={index} course={course} />
-        ))}
+    <div className="relative max-w-6xl mx-auto px-4 pt-20">
+      <div className="flex justify-between items-center mb-5">
+        <h2 className="text-2xl font-bold">Event Terdekat</h2>
+        <Link
+          to="/course-list"
+          onClick={() => scrollTo(0, 0)}
+          className="border border-blue-600 rounded-md px-3 sm:px-5 py-1.5 sm:py-2 font-medium text-black text-xs sm:text-sm w-[90px] sm:w-[95px] transition hover:bg-blue-600 hover:text-white active:scale-90 duration-300"
+        >
+          View All
+        </Link>
       </div>
 
-      <Link to={'/course-list'} onClick={() => scrollTo(0, 0)} className="text-gray-500 border border-gray-500/30 px-10 py-3 rounded">
-        Show all event
-      </Link>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+        {events.map((course, index) => (
+          <EventCard key={index} course={course} />
+        ))}
+      </div>
     </div>
   );
 };
 
-export default CoursesSection;
+export default EventTerdekat;
