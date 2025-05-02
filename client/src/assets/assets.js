@@ -39,20 +39,8 @@ import profile from './profile.jpg';
 
 
 export const assets = {
-  logo,
-  logo2,
-  logo3,
   search_icon,
   sketch,
-  microsoft_logo,
-  walmart_logo,
-  accenture_logo,
-  adobe_logo,
-  paypal_logo,
-  course_1_thumbnail,
-  course_2_thumbnail,
-  course_3_thumbnail,
-  course_4_thumbnail,
   star,
   star_blank,
   profile_img_1,
