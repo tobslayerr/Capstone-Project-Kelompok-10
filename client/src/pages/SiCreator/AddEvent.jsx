@@ -74,12 +74,12 @@ const AddCourse = () => {
 
   return (
     <div className="h-screen overflow-scroll flex flex-col items-start justify-between md:p-8 md:pb-0 p-4 pt-8 pb-0">
-      {/* Form input untuk course */}
+      {/* Form input untuk Creator */}
       <form
         onSubmit={handleSubmit} // Tambahkan ini supaya submit ke handleSubmit
         className="flex flex-col gap-4 max-w-md w-full text-gray-500"
       >
-        {/* Course Title */}
+        {/* Event Title */}
         <div className="flex flex-col gap-1">
           <p>Event Title</p>
           <input
@@ -92,15 +92,15 @@ const AddCourse = () => {
           />
         </div>
 
-        {/* Course Description */}
+        {/* Event Description */}
         <div className="flex flex-col gap-1">
           <p>Event Description</p>
           <div ref={editorRef}></div> {/* Quill editor di sini */}
         </div>
 
-        {/* Course Price & Thumbnail Upload */}
+        {/* Event Price & Thumbnail Upload */}
         <div className="flex items-center justify-between flex-wrap">
-          {/* Course Price */}
+          {/* Event Price */}
           <div className="flex flex-col gap-1">
             <p>Event Price</p>
             <input
@@ -113,7 +113,7 @@ const AddCourse = () => {
             />
           </div>
 
-          {/* Course Thumbnail Upload */}
+          {/* Event Thumbnail Upload */}
           <div className="flex md:flex-row flex-col items-center gap-3">
             <p>Event Thumbnail</p>
             <label htmlFor="thumbnailImage" className="flex items-center gap-3">

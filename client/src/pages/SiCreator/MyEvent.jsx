@@ -2,12 +2,12 @@ import React, { useContext, useEffect, useState } from 'react';
 import { AppContext } from '../../context/AppContext';
 import Loading from '../../components/Customer/Loading';
 import axios from 'axios';
-import { toast } from 'react-toastify'; // ✅ Jangan lupa import toast!
+import { toast } from 'react-toastify'; 
 
 const MyCourses = () => {
   const { currency, backendUrl, isEducator, getToken } = useContext(AppContext);
 
-  const [courses, setCourses] = useState(null); // ✅ Awalnya null, supaya tahu data belum dimuat
+  const [courses, setCourses] = useState(null); 
 
   // ✅ Fungsi untuk fetch courses milik educator
   const fetchEducatorCourses = async () => {
@@ -28,7 +28,7 @@ const MyCourses = () => {
   };
 
   useEffect(() => {
-    // ✅ Fetch data hanya jika user adalah educator
+    // ✅ Fetch data hanya jika user adalah SiCreator
     if (isEducator) {
       fetchEducatorCourses();
     }
