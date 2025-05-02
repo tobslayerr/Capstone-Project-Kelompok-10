@@ -4,7 +4,6 @@ const Home = lazy(() => import('./pages/Customer/Home'));
 const CoursesList = lazy(() => import('./pages/Customer/EventList'));
 const CourseDetails = lazy(() => import('./pages/Customer/EventDetails'));
 const MyEnrollments = lazy(() => import('./pages/Customer/MyEnrollments'));
-const Player = lazy(() => import('./pages/Customer/Player'));
 const Educator = lazy(() => import('./pages/SiCreator/Sicreator'));
 const Dashboard = lazy(() => import('./pages/SiCreator/Dashboard'));
 const AddCourse = lazy(() => import('./pages/SiCreator/AddEvent'));
@@ -31,7 +30,6 @@ const App = () => {
           <Route path="/course-list/:input" element={<CoursesList />} />
           <Route path="/course/:id" element={<CourseDetails />} />
           <Route path="/my-enrollments" element={<MyEnrollments />} />
-          <Route path="/player/:courseId" element={<Player />} />
           <Route path="/loading/:path" element={<Loading />} />
 
           <Route path="/educator" element={<Educator />}>

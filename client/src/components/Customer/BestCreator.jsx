@@ -2,7 +2,6 @@ import React from "react";
 import { FaStar } from "react-icons/fa";
 import { assets } from '../../assets/assets';
 
-
 const creators = [
   { id: 1, name: "Lorem Ipsum Lorem", image: assets.profile , followers: "1.290", rating: "4.9" },
   { id: 2, name: "Lorem Ipsum Lorem", image: assets.profile , followers: "1.290", rating: "4.9" },

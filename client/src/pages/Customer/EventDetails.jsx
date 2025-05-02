@@ -78,7 +78,6 @@ const CourseDetails = () => {
         >
           Back to Home
         </button>
-        {/* left col */}
         <div className="max-w-xl z-10 text-gray-500">
           <h1 className="md:text-course-deatails-heading-large text-course-deatails-heading-small font-semibold text-gray-800">
             {courseData.courseTitle}
@@ -88,7 +87,6 @@ const CourseDetails = () => {
             dangerouslySetInnerHTML={{ __html: courseData.courseDescription.slice(0, 200) }}
           ></p>
 
-          {/* review and rating */}
           <div className="flex items-center space-x-2 pt-3 pb-1 text-sm">
             <p>{calculateRating(courseData)}</p>
             <div className="flex">
@@ -126,7 +124,6 @@ const CourseDetails = () => {
           </div>
         </div>
 
-        {/* right col */}
         <div className="max-w-course-card z-10 shadow-custom-card rounded-t md:rounded-none overflow-hidden bg-white min-w-[300px] sm:min-w-[420px]">
           <img src={courseData.courseThumbnail} alt="" />
           <div className="p-5">

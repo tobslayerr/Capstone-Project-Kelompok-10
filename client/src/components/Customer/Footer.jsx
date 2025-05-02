@@ -1,34 +1,36 @@
 import React from 'react';
 import { FaFacebook, FaXTwitter, FaLinkedin, FaInstagram } from "react-icons/fa6";
-import { FaTicketAlt } from "react-icons/fa";
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
   return (
     <footer className="bg-blue-900 md:px-36 text-left w-full mt-10">
       <div className="flex flex-col md:flex-row items-start px-8 md:px-0 justify-center gap-10 md:gap-32 py-10 border-b border-white/30">
         <div className="flex flex-col md:items-start items-center w-full">
-        <h1 className='font-bold text-white text-xl'>SiEvent</h1>
+          <Link to="/">
+            <h1 className='font-bold text-white text-xl hover:text-gray-300 transition'>SiEvent</h1>
+          </Link>
         </div>
 
-        <div className="flex flex-col md:items-start items-center w-full">
-         <div className="flex space-x-5 text-lg mb-5">
+        <div className="flex flex-col md:items-start items-center w-full mb-18">
+          <div className="flex space-x-5 text-lg mb-5">
             <FaFacebook className="cursor-pointer  text-white hover:text-gray-600 transition" />
             <FaXTwitter className="cursor-pointer text-white hover:text-gray-600 transition" />
             <FaLinkedin className="cursor-pointer text-white hover:text-gray-600 transition" />
             <FaInstagram className="cursor-pointer text-white hover:text-gray-600 transition" />
           </div>
-          <ul className="flex md:flex-col  w-full justify-between text-sm text-white/80 md:space-y-2">
+          <ul className="flex md:flex-col w-full justify-between text-xs text-white/80 md:space-y-4 md:text-sm">
             <li>
-              <a href="#">Home</a>
+              <a href="#">Syarat dan Ketentuan</a>
             </li>
             <li>
-              <a href="#">About us</a>
+              <a href="#">Apa itu SiEvent?</a>
             </li>
             <li>
-              <a href="#">Contact us</a>
+              <a href="#">Kebijakan Privasi</a>
             </li>
             <li>
-              <a href="#">Privacy policy</a>
+              <a href="#">Hubungi Kami</a>
             </li>
           </ul>
         </div>
