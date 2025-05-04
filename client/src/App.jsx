@@ -13,7 +13,6 @@ import Loading from './components/Customer/Loading';
 import Navbar from './components/Customer/Navbar';
 import 'quill/dist/quill.snow.css';
 import { ToastContainer } from 'react-toastify';
-import 'react-loading-skeleton/dist/skeleton.css';
 
 
 const App = () => {
