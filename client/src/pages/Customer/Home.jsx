@@ -7,7 +7,6 @@ import EventTerdekat from '../../components/Customer/EventTerdekat';
 import { useUser } from '@clerk/clerk-react';
 import EventGratis from '../../components/Customer/EventGratis';
 
-
 const Home = () => {
   const { user } = useUser(); 
 

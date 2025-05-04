@@ -14,9 +14,9 @@ const EventTerdekat = () => {
         <Link
           to="/course-list"
           onClick={() => scrollTo(0, 0)}
-          className="ml-16 border border-blue-600 rounded-md px-3 sm:px-5 py-1.5 sm:py-2 font-medium text-black text-xs sm:text-sm w-[90px] sm:w-[95px] transition hover:bg-blue-600 hover:text-white active:scale-90 duration-300"
+          className="ml-16 border border-blue-600 rounded-md px-3 sm:px-1 py-1.5 sm:py-2 font-medium text-black text-xs sm:text-sm w-[120px] transition hover:bg-blue-600 hover:text-white active:scale-90 duration-300"
         >
-          View All
+          Selengkapnya
         </Link>
       </div>
 

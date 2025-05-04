@@ -1,10 +1,10 @@
 import React, { useContext } from "react";
 import { AppContext } from "../../context/AppContext";
-import EventCard from "./EventCard"; // pastikan path-nya sesuai
+import EventCard from "./EventCard"; 
 
 const EventGratis = () => {
   const { allCourses } = useContext(AppContext);
-  const events = allCourses.slice(0, 4); // ambil 4 event teratas
+  const events = allCourses.slice(0, 4); 
 
   return (
     <div className="max-w-[90%] sm:max-w-6xl mx-auto py-10 px-4 sm:px-6 lg:px-8 bg-gray-100 shadow-lg rounded-2xl mt-10">

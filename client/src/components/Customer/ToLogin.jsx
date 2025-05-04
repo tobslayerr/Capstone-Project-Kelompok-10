@@ -16,7 +16,7 @@ const ToLogin = () => {
         onClick={() => openSignIn()}
         className="mt-5 bg-blue-600 text-white px-6 py-2 rounded-full text-sm sm:text-base font-medium transition duration-300 hover:bg-blue-400 active:scale-90"
       >
-        Masuk
+        Sign in
       </button>
     </div>
   );

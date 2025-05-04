@@ -88,7 +88,7 @@ const Navbar = () => {
           <UserButton />
         ) : (
           <button onClick={() => openSignIn()} className="bg-blue-600 text-white px-5 py-2 rounded-full">
-            Create Account
+            Sign in
           </button>
         )}
       </div>
@@ -104,7 +104,7 @@ const Navbar = () => {
             onClick={() => openSignIn()}
             className="bg-blue-600 text-white px-3 py-1 rounded-full text-sm"
           >
-            Create
+            Sign in
           </button>
         )}
       </div>
