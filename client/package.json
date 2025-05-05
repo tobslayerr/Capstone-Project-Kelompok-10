@@ -12,6 +12,7 @@
   "dependencies": {
     "@clerk/clerk-react": "^5.24.2",
     "axios": "^1.9.0",
+    "embla-carousel": "^8.6.0",
     "humanize-duration": "^3.32.1",
     "lucide-react": "^0.505.0",
     "qrcode.react": "^4.2.0",
