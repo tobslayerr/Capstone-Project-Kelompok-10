@@ -1,5 +1,0 @@
-# Abaikan folder dependencies
-node_modules/
-
-# Abaikan file konfigurasi lingkungan
-.env
