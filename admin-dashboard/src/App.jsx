@@ -1,17 +1,16 @@
-import Sidebar from './components/Sidebar';
-import Navbar from './components/Navbar';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import AdminLogin from './pages/Login';
 import Dashboard from './pages/Dashboard';
 
-const App = () => {
+function App() {
   return (
-    <div className="flex">
-      <Sidebar />
-      <div className="flex-1">
-        <Navbar />
-        <Dashboard />
-      </div>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<AdminLogin />} />
+        <Route path="/admin/dashboard" element={<Dashboard />} />
+      </Routes>
+    </Router>
   );
-};
+}
 
 export default App;
