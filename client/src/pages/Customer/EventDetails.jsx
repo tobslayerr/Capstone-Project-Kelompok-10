@@ -167,7 +167,13 @@ const CourseDetails = () => {
             >
               {isAlreadyEnrolled ? 'Already Enrolled' : 'Enroll Now'}
             </button>
-
+            
+            <button
+              onClick={() => toast.info("Fitur ini Sedang dalam tahap pengembangan")}
+              className="mt-2 w-full py-2 rounded border border-red-500 text-red-500 hover:bg-red-500 hover:text-white transition"
+            >
+              Report Event
+            </button> 
             <div className="pt-6">
               <p className="md:text-xl text-lg font-medium text-gray-800">What's in the event?</p>
               <ul className="ml-4 pt-2 text-sm md:text-default list-disc text-gray-500">
