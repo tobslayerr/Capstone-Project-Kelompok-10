@@ -12,7 +12,11 @@ const EventCard = ({ course }) => {
 
       <div className="p-3 text-left">
         <h3 className="text-base font-semibold">{course.courseTitle}</h3>
-        <p className="text-gray-500">{course.educator.name}</p>
+        {course.educator && course.educator.name ? (
+  <p className="text-gray-500">{course.educator.name}</p>
+) : (
+  <p className="text-gray-500">Unknown Educator</p>
+)}
         <div className="flex items-center space-x-2">
           <p>{calculateRating(course)}</p>
           <div className="flex">
@@ -25,8 +29,14 @@ const EventCard = ({ course }) => {
         </div>
 
         <p className="text-base font-semibold text-gray-800">
-          {currency}
-          {(course.coursePrice - (course.discount * course.coursePrice) / 100).toFixed(2)}
+          {course.coursePrice - (course.discount * course.coursePrice) / 100 === 0 ? (
+            <span className="inline-block bg-green-100 text-green-600 text-sm font-semibold px-2 py-1 rounded">Free</span>
+          ) : (
+            <>
+              {currency}
+              {(course.coursePrice - (course.discount * course.coursePrice) / 100).toFixed(2)}
+            </>
+          )}
         </p>
       </div>
     </Link>

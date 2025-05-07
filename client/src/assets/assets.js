@@ -36,7 +36,9 @@ import image2 from './image2.jpg';
 import image3 from './image3.jpg';
 import image4 from './image4.jpg';
 import profile from './profile.jpg';
-
+import user from './user.png';
+import ticket from './ticket.png';
+import tickets from './tickets.png'
 
 export const assets = {
   search_icon,
@@ -77,6 +79,9 @@ export const assets = {
   image3,
   image4,
   profile,
+  user,
+  ticket,
+  tickets,
 };
 
 export const dummyEventDetails = [

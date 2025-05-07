@@ -30,6 +30,13 @@ const Dashboard = () => {
     }
   }, [isEducator]);
 
+  const formatCurrency = (amount) => {
+    return new Intl.NumberFormat('id-ID', {
+      style: 'currency',
+      currency: 'IDR',
+    }).format(amount);
+  };
+
   return dashboardData ? (
     <div className="min-h-screen flex flex-col items-start justify-between gap-8 md:p-8 md:pb-0 p-4 pt-8 pb-0">
       <div className="space-y-5">
@@ -54,8 +61,7 @@ const Dashboard = () => {
             <img src={assets.earning_icon} alt="earning_icon" className="w-10 h-10" />
             <div>
               <p className="text-2xl font-medium text-gray-600">
-                {currency}
-                {dashboardData.totalEarnings}
+                {formatCurrency(dashboardData.totalEarnings)}
               </p>
               <p className="text-base text-gray-500">Total Earnings</p>
             </div>

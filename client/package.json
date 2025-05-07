@@ -15,6 +15,7 @@
     "embla-carousel": "^8.6.0",
     "embla-carousel-autoplay": "^8.6.0",
     "embla-carousel-react": "^8.6.0",
+    "html5-qrcode": "^2.3.8",
     "humanize-duration": "^3.32.1",
     "lucide-react": "^0.505.0",
     "qrcode.react": "^4.2.0",
