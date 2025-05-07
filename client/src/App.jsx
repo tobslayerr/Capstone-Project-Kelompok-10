@@ -9,12 +9,15 @@ const Dashboard = lazy(() => import('./pages/SiCreator/Dashboard'));
 const AddCourse = lazy(() => import('./pages/SiCreator/AddEvent'));
 const MyCourses = lazy(() => import('./pages/SiCreator/MyEvent'));
 const StudentsEnrolled = lazy(() => import('./pages/SiCreator/CustomerEnrolled'));
+const UpdateCourse = lazy(() => import('./pages/SiCreator/Updateevent')); // Import UpdateCourse
+const SuperAdminPage = lazy(() => import('./pages/superadmin/Superadminpage'));
+import EducatorApplicationPage from './pages/SiCreator/SiCreatorApplicationPage';
+
 import Loading from './components/Customer/Loading';
 import Navbar from './components/Customer/Navbar';
 import 'quill/dist/quill.snow.css';
 import { ToastContainer } from 'react-toastify';
-import 'react-loading-skeleton/dist/skeleton.css';
-
+import Profile from './pages/SiCreator/Profile';
 
 const App = () => {
   const isEducatorRoute = useMatch('/educator/*');
@@ -33,12 +36,20 @@ const App = () => {
           <Route path="/my-enrollments" element={<MyEnrollments />} />
           <Route path="/loading/:path" element={<Loading />} />
 
+          {/* Halaman Apply Jadi Educator */}
+          <Route path="/educator/apply" element={<EducatorApplicationPage />} />
+
           <Route path="/educator" element={<Educator />}>
+            <Route path="profile" element={<Profile />} />
             <Route path="/educator" element={<Dashboard />} />
             <Route path="add-course" element={<AddCourse />} />
             <Route path="my-courses" element={<MyCourses />} />
-            <Route path="student-enrolled" element={<StudentsEnrolled />} />
+            <Route path="manage-tickets" element={<StudentsEnrolled />} />
+            <Route path="update-course/:id" element={<UpdateCourse />} />
           </Route>
+
+          {/* Super Admin Route */}
+          <Route path="/superadmin" element={<SuperAdminPage />} />
         </Routes>
       </Suspense>
     </div>

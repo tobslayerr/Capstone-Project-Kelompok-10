@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useClerk, UserButton, useUser } from '@clerk/clerk-react';
 import { AppContext } from '../../context/AppContext';
 import { toast } from 'react-toastify';
@@ -8,37 +8,42 @@ import { Menu, X, ChevronDown } from 'lucide-react';
 
 const Navbar = () => {
   const { navigate, isEducator, backendUrl, setIsEducator, getToken } = useContext(AppContext);
+  const { openSignIn } = useClerk();
+  const { user } = useUser();
+  const location = useLocation();
+
   const [menuOpen, setMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [educatorStatus, setEducatorStatus] = useState(null);
   const dropdownRef = useRef(null);
 
   const isCourseListPage = location.pathname.includes('/course-list');
 
-  const { openSignIn } = useClerk();
-  const { user } = useUser();
-
-  const becomeEducator = async () => {
+  const fetchEducatorStatus = async () => {
     try {
-      if (isEducator) {
-        navigate('/educator');
-        return;
-      }
-
       const token = await getToken();
-      const { data } = await axios.get(backendUrl + '/api/educator/update-role', {
+      const { data } = await axios.get(`${backendUrl}/api/educator/status`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-
       if (data.success) {
-        setIsEducator(true);
-        toast.success(data.message);
+        setEducatorStatus(data.status); // e.g., 'pending', 'approved', 'rejected', or null
+        setIsEducator(data.status === 'approved');
       } else {
-        toast.error(data.message);
+        setEducatorStatus(null);
+        setIsEducator(false);
       }
-    } catch (error) {
-      toast.error(error.message);
+    } catch (err) {
+      console.error(err);
+      setEducatorStatus(null);
+      setIsEducator(false);
     }
   };
+
+  useEffect(() => {
+    if (user) {
+      fetchEducatorStatus();
+    }
+  }, [user]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -46,9 +51,21 @@ const Navbar = () => {
         setDropdownOpen(false);
       }
     };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  const becomeEducator = async () => {
+    try {
+      if (educatorStatus === 'approved') {
+        navigate('/educator');
+      } else {
+        navigate('/educator/apply');
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
 
   return (
     <div className={`relative z-50 flex items-center justify-between px-4 sm:px-10 md:px-14 lg:px-36 border-b border-white py-4 shadow-lg ${isCourseListPage ? 'bg-blue-800' : 'bg-blue-900'}`}>
@@ -58,10 +75,7 @@ const Navbar = () => {
 
       <div className="hidden md:flex items-center gap-6 text-white">
         <div className="relative" ref={dropdownRef}>
-          <button
-            onClick={() => setDropdownOpen((prev) => !prev)}
-            className="flex items-center gap-1 font-medium focus:outline-none"
-          >
+          <button onClick={() => setDropdownOpen((prev) => !prev)} className="flex items-center gap-1 font-medium focus:outline-none">
             Menu <ChevronDown size={18} />
           </button>
           <div
@@ -69,17 +83,24 @@ const Navbar = () => {
               dropdownOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'
             }`}
           >
-            <Link to="/harga" onClick={() => setDropdownOpen(false)} className="block px-4 py-2 hover:bg-gray-100">Harga</Link>
-            <Link to="/event" onClick={() => setDropdownOpen(false)} className="block px-4 py-2 hover:bg-gray-100">Event</Link>
+            <Link to="/harga" onClick={() => setDropdownOpen(false)} className="block px-4 py-2 hover:bg-gray-100">
+              Harga
+            </Link>
+            <Link to="/event" onClick={() => setDropdownOpen(false)} className="block px-4 py-2 hover:bg-gray-100">
+              Event
+            </Link>
           </div>
         </div>
 
         {user && (
           <>
-            <button onClick={becomeEducator}>
-              {isEducator ? 'SiCreator Dashboard' : 'Become SiCreator'}
-            </button>
-            |
+            {educatorStatus === 'pending' && (
+              <button disabled className="opacity-50 cursor-not-allowed" title="Menunggu persetujuan SuperAdmin">
+                Waiting Approval
+              </button>
+            )}
+            {educatorStatus === 'approved' && <button onClick={() => navigate('/educator')}>SiCreator Dashboard</button>}
+            {!educatorStatus && <button onClick={() => navigate('/educator/apply')}>Become SiCreator</button>}
             <Link to="/my-enrollments">My Enrollments</Link>
           </>
         )}
@@ -87,24 +108,19 @@ const Navbar = () => {
         {user ? (
           <UserButton />
         ) : (
-          <button onClick={() => openSignIn()} className="bg-blue-600 text-white px-5 py-2 rounded-full">
-            Sign in
+          <button onClick={openSignIn} className="bg-blue-600 text-white px-5 py-2 rounded-full">
+            Create Account
           </button>
         )}
       </div>
 
       <div className="md:hidden flex items-center gap-3 text-white">
-        <button onClick={() => setMenuOpen(!menuOpen)}>
-          {menuOpen ? <X size={28} /> : <Menu size={28} />}
-        </button>
+        <button onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <X size={28} /> : <Menu size={28} />}</button>
         {user ? (
           <UserButton />
         ) : (
-          <button
-            onClick={() => openSignIn()}
-            className="bg-blue-600 text-white px-3 py-1 rounded-full text-sm"
-          >
-            Sign in
+          <button onClick={openSignIn} className="bg-blue-600 text-white px-3 py-1 rounded-full text-sm">
+            Create
           </button>
         )}
       </div>
@@ -115,10 +131,7 @@ const Navbar = () => {
         }`}
       >
         <div className="relative">
-          <button
-            onClick={() => setDropdownOpen((prev) => !prev)}
-            className="flex items-center gap-1 font-medium"
-          >
+          <button onClick={() => setDropdownOpen((prev) => !prev)} className="flex items-center gap-1 font-medium">
             Menu <ChevronDown size={18} />
           </button>
           <div
@@ -126,17 +139,25 @@ const Navbar = () => {
               dropdownOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'
             }`}
           >
-            <Link to="/harga" onClick={() => setDropdownOpen(false)} className="block px-4 py-2 hover:bg-gray-100">Harga</Link>
-            <Link to="/event" onClick={() => setDropdownOpen(false)} className="block px-4 py-2 hover:bg-gray-100">Event</Link>
+            <Link to="/harga" onClick={() => setDropdownOpen(false)} className="block px-4 py-2 hover:bg-gray-100">
+              Harga
+            </Link>
+            <Link to="/event" onClick={() => setDropdownOpen(false)} className="block px-4 py-2 hover:bg-gray-100">
+              Event
+            </Link>
           </div>
         </div>
 
         {user && (
           <>
-            <button onClick={() => { becomeEducator(); setMenuOpen(false); }}>
-              {isEducator ? 'Educator Dashboard' : 'Become Educator'}
-            </button>
-            <Link to="/my-enrollments" onClick={() => setMenuOpen(false)}>My Enrollments</Link>
+            {educatorStatus === 'pending' && (
+              <button disabled className="opacity-50 cursor-not-allowed" title="Menunggu persetujuan SuperAdmin">
+                Waiting Approval
+              </button>
+            )}
+            {educatorStatus === 'approved' && <button onClick={() => navigate('/educator')}>SiCreator Dashboard</button>}
+            {!educatorStatus && <button onClick={() => navigate('/educator/apply')}>Become SiCreator</button>}
+            <Link to="/my-enrollments">My Enrollments</Link>
           </>
         )}
       </div>

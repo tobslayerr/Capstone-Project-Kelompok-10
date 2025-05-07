@@ -2,17 +2,17 @@ import React, { useContext, useEffect, useState } from 'react';
 import { AppContext } from '../../context/AppContext';
 import Loading from '../../components/Customer/Loading';
 import axios from 'axios';
-import { toast } from 'react-toastify'; 
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 const MyCourses = () => {
   const { currency, backendUrl, isEducator, getToken } = useContext(AppContext);
+  const [courses, setCourses] = useState(null);
+  const navigate = useNavigate();
 
-  const [courses, setCourses] = useState(null); 
-
-  // ✅ Fungsi untuk fetch courses milik educator
   const fetchEducatorCourses = async () => {
     try {
-      const token = await getToken(); // Ambil token user login
+      const token = await getToken();
       const { data } = await axios.get(`${backendUrl}/api/educator/courses`, {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -27,19 +27,41 @@ const MyCourses = () => {
     }
   };
 
+  const handleDelete = async (courseId) => {
+    if (!window.confirm('Are you sure you want to delete this event?')) return;
+
+    try {
+      const token = await getToken();
+      const { data } = await axios.delete(`${backendUrl}/api/educator/courses/${courseId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (data.success) {
+        toast.success('Event deleted successfully');
+        // Refresh list
+        fetchEducatorCourses();
+      } else {
+        toast.error(data.message || 'Failed to delete course');
+      }
+    } catch (error) {
+      toast.error(error.message || 'Something went wrong');
+    }
+  };
+
+  const handleUpdate = (courseId) => {
+    navigate(`/educator/update-course/${courseId}`); // Navigasi ke halaman update course
+  };
+
   useEffect(() => {
-    // ✅ Fetch data hanya jika user adalah SiCreator
     if (isEducator) {
       fetchEducatorCourses();
     }
   }, [isEducator]);
 
-  // ✅ Kondisi loading jika courses belum dimuat
   if (courses === null) {
     return <Loading />;
   }
 
-  // ✅ Kondisi jika belum ada course
   if (courses.length === 0) {
     return (
       <div className="h-screen flex flex-col items-center justify-center">
@@ -48,7 +70,6 @@ const MyCourses = () => {
     );
   }
 
-  // ✅ Kondisi jika courses sudah ada
   return (
     <div className="h-screen flex flex-col items-start md:p-8 p-4 pt-8">
       <div className="w-full">
@@ -62,6 +83,7 @@ const MyCourses = () => {
                 <th className="px-4 py-3 text-left">Earnings</th>
                 <th className="px-4 py-3 text-left">Participants</th>
                 <th className="px-4 py-3 text-left">Published On</th>
+                <th className="px-4 py-3 text-left">Actions</th>
               </tr>
             </thead>
             <tbody className="text-sm text-gray-600">
@@ -79,6 +101,14 @@ const MyCourses = () => {
                     </td>
                     <td className="px-4 py-3">{course.enrolledStudents.length}</td>
                     <td className="px-4 py-3">{new Date(course.createdAt).toLocaleDateString()}</td>
+                    <td className="px-4 py-3 space-x-2">
+                      <button onClick={() => handleDelete(course._id)} className="bg-red-500 hover:bg-red-600 text-white text-sm px-3 py-1 rounded">
+                        Delete
+                      </button>
+                      <button onClick={() => handleUpdate(course._id)} className="bg-blue-500 hover:bg-blue-600 text-white text-sm px-3 py-1 rounded">
+                        Update
+                      </button>
+                    </td>
                   </tr>
                 );
               })}

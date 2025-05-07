@@ -9,10 +9,11 @@ const Sidebar = () => {
   const navigate = useNavigate();
 
   const menuItems = [
+    { name: 'Profile', path: '/educator/profile', icon: assets.user },
     { name: 'Dashboard', path: '/educator', icon: assets.home_icon },
     { name: 'Add Event', path: '/educator/add-course', icon: assets.add_icon },
     { name: 'My Event', path: '/educator/my-courses', icon: assets.my_course_icon },
-    { name: 'Customer Enrolled', path: '/educator/student-enrolled', icon: assets.person_tick_icon },
+    { name: 'Manage Ticket', path: '/educator/manage-tickets', icon: assets.ticket },
   ];
 
   return (
@@ -38,9 +39,7 @@ const Sidebar = () => {
           ))}
         </div>
 
-        {/* Back to Home Button */}
         <div className="mt-4 px-4 flex justify-center">
-          {/* Mobile (icon only) */}
           <button
             onClick={() => navigate('/')}
             className="md:hidden p-2 rounded-full bg-blue-600 text-white hover:bg-blue-400 transition active:scale-95"
@@ -48,8 +47,6 @@ const Sidebar = () => {
           >
             <ArrowLeft size={20} />
           </button>
-
-          {/* Desktop (full button) */}
           <button
             onClick={() => navigate('/')}
             className="hidden md:block w-full px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-300 transition active:scale-95"

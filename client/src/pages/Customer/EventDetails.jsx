@@ -39,18 +39,33 @@ const CourseDetails = () => {
       }
 
       const token = await getToken();
+      const finalPrice = courseData.coursePrice - (courseData.discount * courseData.coursePrice) / 100;
 
-      const { data } = await axios.post(
-        backendUrl + '/api/user/purchase',
-        { courseId: courseData._id },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      if (finalPrice === 0) {
+        // Cek apakah user sudah terdaftar di course
+        if (userData.enrolledCourses.includes(courseData._id)) {
+          return toast.warn('Already enrolled in this course');
+        }
 
-      if (data.success) {
-        const { session_url } = data;
-        window.location.replace(session_url);
+        // Langsung enroll tanpa bayar
+        const { data } = await axios.post(backendUrl + '/api/user/enroll', { courseId: courseData._id }, { headers: { Authorization: `Bearer ${token}` } });
+
+        if (data.success) {
+          toast.success('Successfully enrolled in free course!');
+          setIsAlreadyEnrolled(true); // Update state jika sudah berhasil enroll
+        } else {
+          toast.error(data.message);
+        }
       } else {
-        toast.error(data.message);
+        // Enroll berbayar
+        const { data } = await axios.post(backendUrl + '/api/user/purchase', { courseId: courseData._id }, { headers: { Authorization: `Bearer ${token}` } });
+
+        if (data.success) {
+          const { session_url } = data;
+          window.location.replace(session_url);
+        } else {
+          toast.error(data.message);
+        }
       }
     } catch (error) {
       toast.error(error.message);
@@ -71,56 +86,41 @@ const CourseDetails = () => {
     <>
       <div className="flex md:flex-row flex-col-reverse gap-10 relative items-start justify-between md:px-36 px-8 md:pt-30 pt-20 text-left">
         <div className="absolute top-0 left-0 w-full h-section-height -z-1 bg-gradient-to-b from-cyan-100/70"></div>
-        
-        <button
-          onClick={() => navigate('/')}
-          className="z-10 mb-1 px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-300 transition md:absolute md:top-8 md:left-25 active:scale-90"
-        >
+
+        <button onClick={() => navigate('/')} className="z-10 mb-1 px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-300 transition md:absolute md:top-8 md:left-25 active:scale-90">
           Back to Home
         </button>
         <div className="max-w-xl z-10 text-gray-500">
-          <h1 className="md:text-course-deatails-heading-large text-course-deatails-heading-small font-semibold text-gray-800">
-            {courseData.courseTitle}
-          </h1>
-          <p
-            className="pt-4 md:text-base text-sm"
-            dangerouslySetInnerHTML={{ __html: courseData.courseDescription.slice(0, 200) }}
-          ></p>
+          <h1 className="md:text-course-deatails-heading-large text-course-deatails-heading-small font-semibold text-gray-800">{courseData.courseTitle}</h1>
+          <p className="pt-4 md:text-base text-sm" dangerouslySetInnerHTML={{ __html: courseData.courseDescription.slice(0, 200) }}></p>
 
           <div className="flex items-center space-x-2 pt-3 pb-1 text-sm">
             <p>{calculateRating(courseData)}</p>
             <div className="flex">
               {[...Array(5)].map((_, i) => (
-                <img
-                  key={i}
-                  src={i < Math.floor(calculateRating(courseData)) ? assets.star : assets.star_blank}
-                  alt=""
-                  className="w-3.5 h-3.5"
-                />
+                <img key={i} src={i < Math.floor(calculateRating(courseData)) ? assets.star : assets.star_blank} alt="" className="w-3.5 h-3.5" />
               ))}
             </div>
 
             <p className="text-blue-600">
-              ({courseData.courseRatings.length}{' '}
-              {courseData.courseRatings.length > 1 ? 'ratings' : 'rating'})
+              ({courseData.courseRatings.length} {courseData.courseRatings.length > 1 ? 'ratings' : 'rating'})
             </p>
 
             <p>
-              {courseData.enrolledStudents.length}{' '}
-              {courseData.enrolledStudents.length > 1 ? 'students' : 'student'}
+              {courseData.enrolledStudents.length} {courseData.enrolledStudents.length > 1 ? 'students' : 'student'}
             </p>
           </div>
 
           <p className="text-sm">
-            Course by <span className="text-blue-600 underline">{courseData.educator.name}</span>
+            Course by <span className="text-blue-600 underline">
+            {courseData.educator && courseData.educator.name ? courseData.educator.name : "Unknown Educator"}
+            </span>
           </p>
+          
 
           <div className="py-20 text-sm md:text-default">
             <h3 className="text-zl font-semibold text-gray-800">Event Description</h3>
-            <p
-              className="pt-3 rich-text"
-              dangerouslySetInnerHTML={{ __html: courseData.courseDescription }}
-            ></p>
+            <p className="pt-3 rich-text" dangerouslySetInnerHTML={{ __html: courseData.courseDescription }}></p>
           </div>
         </div>
 
@@ -137,8 +137,7 @@ const CourseDetails = () => {
             <div className="flex gap-3 items-center pt-2">
               <p className="text-gray-800 md:text-4xl text-2xl font-semibold">
                 {currency}
-                {(courseData.coursePrice -
-                  (courseData.discount * courseData.coursePrice) / 100).toFixed(2)}
+                {(courseData.coursePrice - (courseData.discount * courseData.coursePrice) / 100).toFixed(2)}
               </p>
               <p className="md:text-lg text-gray-500 line-through">
                 {currency}
@@ -161,19 +160,10 @@ const CourseDetails = () => {
               </div>
             </div>
 
-            <button
-              onClick={enrollCourse}
-              className="md:mt-6 mt-4 w-full py-3 rounded bg-blue-600 text-white font-medium"
-            >
+            <button onClick={enrollCourse} className="md:mt-6 mt-4 w-full py-3 rounded bg-blue-600 text-white font-medium">
               {isAlreadyEnrolled ? 'Already Enrolled' : 'Enroll Now'}
             </button>
-            
-            <button
-              onClick={() => toast.info("Fitur ini Sedang dalam tahap pengembangan")}
-              className="mt-2 w-full py-2 rounded border border-red-500 text-red-500 hover:bg-red-500 hover:text-white transition"
-            >
-              Report Event
-            </button> 
+
             <div className="pt-6">
               <p className="md:text-xl text-lg font-medium text-gray-800">What's in the event?</p>
               <ul className="ml-4 pt-2 text-sm md:text-default list-disc text-gray-500">
@@ -182,13 +172,9 @@ const CourseDetails = () => {
                 <li>Downloadable resource</li>
                 <li>Certificate of completion</li>
               </ul>
-              
             </div>
-            
           </div>
-          
         </div>
-        
       </div>
 
       <Footer />

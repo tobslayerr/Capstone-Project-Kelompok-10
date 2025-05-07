@@ -188,3 +188,45 @@ export const addUserRating = async (req, res) => {
     return res.json({ success: false, message: error.message });
   }
 };
+
+// Enroll user ke course gratis
+export const enrollFreeCourse = async (req, res) => {
+  try {
+    const userId = req.userId; // req.userId didapatkan dari middleware auth (sebelumnya sudah diterapkan)
+    const { courseId } = req.body;
+
+    // Ambil data course berdasarkan ID
+    const course = await Course.findById(courseId);
+    if (!course) {
+      return res.status(404).json({ success: false, message: 'Course not found' });
+    }
+
+    // Cek apakah course itu gratis (harga 0)
+    const priceAfterDiscount = course.coursePrice - (course.discount * course.coursePrice) / 100;
+    if (priceAfterDiscount > 0) {
+      return res.status(400).json({ success: false, message: 'This course is not free' });
+    }
+
+    // Ambil data user
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'User not found' });
+    }
+
+    // Cek apakah user sudah terdaftar di course tersebut
+    if (user.enrolledCourses.includes(courseId)) {
+      return res.status(400).json({ success: false, message: 'Already enrolled in this course' });
+    }
+
+    // Daftarkan user ke course
+    user.enrolledCourses.push(courseId);
+    course.enrolledStudents.push(userId);
+
+    await user.save();
+    await course.save();
+
+    return res.json({ success: true, message: 'Successfully enrolled in free course' });
+  } catch (error) {
+    return res.status(500).json({ success: false, message: error.message });
+  }
+};
